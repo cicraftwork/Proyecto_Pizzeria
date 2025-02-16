@@ -1,37 +1,31 @@
+import { useState } from 'react'
 import Header from '../Header/Header'
 import CardPizza from '../CardPizza/CardPizza'
+import { pizzas } from '../../assets/js/pizzas'
 
 const Home = () => {
-    // Array de pizzas con la información requerida
-    const pizzas = [
-        {
-            name: "Pizza Napolitana",
-            price: 5950,
-            ingredients: ["mozzarella", "tomates", "jamón", "orégano"],
-            img: "https://firebasestorage.googleapis.com/v0/b/apis-varias-mias.appspot.com/o/pizzeria%2Fpizza-1239077_640_cl.jpg?alt=media&token=6a9a33da-5c00-49d4-9080-784dcc87ec2c"
-        },
-        {
-            name: "Pizza Española",
-            price: 6950,
-            ingredients: ["mozzarella", "gorgonzola", "parmesano", "provolone"],
-            img: "https://firebasestorage.googleapis.com/v0/b/apis-varias-mias.appspot.com/o/pizzeria%2Fcheese-164872_640_com.jpg?alt=media&token=18b2b821-4d0d-43f2-a1c6-8c57bc388fab"
-        },
-        {
-            name: "Pizza Pepperoni",
-            price: 6950,
-            ingredients: ["mozzarella", "pepperoni", "orégano"],
-            img: "https://firebasestorage.googleapis.com/v0/b/apis-varias-mias.appspot.com/o/pizzeria%2Fpizza-1239077_640_com.jpg?alt=media&token=e7cde87a-08d5-4040-ac54-90f6c31eb3e3"
-        }
-    ];
+    // Usamos useState para manejar el estado de las pizzas
+    const [pizzasList, setPizzasList] = useState(pizzas)
 
     return (
         <>
+            {/* Header que muestra el banner principal */}
             <Header />
+
+            {/* Contenedor principal para las pizzas */}
             <div className="container mt-5">
-                <div className="row g-3">
-                    {pizzas.map((pizza, i) => (
-                        <div key={i} className="col-12 col-md-6 col-lg-4">
-                            <CardPizza {...pizza} />
+                <div className="row g-4">
+                    {/* Mapeamos el array de pizzas para crear las cards */}
+                    {pizzasList.map((pizza) => (
+                        <div key={pizza.id} className="col-12 col-md-6 col-lg-4">
+                            <CardPizza
+                                name={pizza.name}
+                                price={pizza.price}
+                                ingredients={pizza.ingredients}
+                                img={pizza.img}
+                                desc={pizza.desc}
+                                id={pizza.id}
+                            />
                         </div>
                     ))}
                 </div>
