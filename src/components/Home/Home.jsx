@@ -1,33 +1,43 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import Header from '../Header/Header'
 import CardPizza from '../CardPizza/CardPizza'
-import { pizzas } from '../../assets/js/pizzas'
 
 const Home = () => {
-    // Usamos useState para manejar el estado de las pizzas
-    const [pizzasList, setPizzasList] = useState(pizzas)
+    const [pizzasList, setPizzasList] = useState([])
+    const [loading, setLoading] = useState(true)
+    const [error, setError] = useState(null)
+
+    useEffect(() => {
+        const fetchPizzas = async () => {
+            try {
+                const response = await fetch('http://localhost:5000/api/pizzas')
+                if (!response.ok) {
+                    throw new Error('Error al cargar las pizzas')
+                }
+                const data = await response.json()
+                setPizzasList(data)
+            } catch (error) {
+                setError(error.message)
+            } finally {
+                setLoading(false)
+            }
+        }
+        fetchPizzas()
+    }, [])
+
+    if (loading) return <div className="text-center mt-5">Cargando pizzas...</div>
+    if (error) return <div className="text-center mt-5 text-danger">{error}</div>
 
     return (
         <>
-            {/* Header que muestra el banner principal */}
             <Header />
-
-            {/* Contenedor principal para las pizzas */}
             <div className="container mt-5">
                 <div className="row g-4">
-                    {/* Mapeamos el array de pizzas para crear las cards */}
-                    {pizzasList.map((pizza) => (
-                        <div key={pizza.id} className="col-12 col-md-6 col-lg-4">
-                            <CardPizza
-                                name={pizza.name}
-                                price={pizza.price}
-                                ingredients={pizza.ingredients}
-                                img={pizza.img}
-                                desc={pizza.desc}
-                                id={pizza.id}
-                            />
-                        </div>
-                    ))}
+                {pizzasList.map(({ id, ...pizza }) => (
+                    <div key={id} className="col-12 col-md-6 col-lg-4">
+                        <CardPizza {...pizza} />
+                    </div>
+                ))}
                 </div>
             </div>
         </>
