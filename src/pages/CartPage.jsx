@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Card, Button } from 'react-bootstrap';
-import { pizzaCart } from '../../assets/js/pizzas';
+import { pizzaCart } from '../assets/js/pizzas';
 
 const CartPage = () => {
     const [cart, setCart] = useState(pizzaCart);
