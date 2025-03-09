@@ -7,7 +7,7 @@ const Header = () => {
                  backgroundImage: `url(${headerImage})`,
                  backgroundSize: 'cover',
                  backgroundPosition: 'center',
-                 minHeight: '300px', // Reducimos de 400px a 300px
+                 minHeight: '300px', // Reduce de 400px a 300px
                  display: 'flex',
                  alignItems: 'center',
                  justifyContent: 'center'
