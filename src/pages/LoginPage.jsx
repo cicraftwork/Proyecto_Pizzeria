@@ -1,42 +1,47 @@
-import { useState } from 'react'
+// src/pages/LoginPage.jsx
+import { useState, useContext } from 'react';
+import { useNavigate } from 'react-router-dom';
+import { UserContext } from '../context/UserContext';
 
 const LoginPage = () => {
-    const [email, setEmail] = useState('')
-    const [password, setPassword] = useState('')
-    const [errors, setErrors] = useState({})
+    const [email, setEmail] = useState('');
+    const [password, setPassword] = useState('');
+    const [errors, setErrors] = useState({});
+    
+    const { login } = useContext(UserContext);
+    const navigate = useNavigate();
 
     const validateEmail = (email) => {
-        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-        return regex.test(email)
-    }
+        const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return regex.test(email);
+    };
 
     const handleSubmit = (e) => {
-        e.preventDefault()
-        const newErrors = {}
+        e.preventDefault();
+        const newErrors = {};
 
         // Validación del email
         if (!email.trim()) {
-            newErrors.email = 'El email es obligatorio'
+            newErrors.email = 'El email es obligatorio';
         } else if (!validateEmail(email)) {
-            newErrors.email = 'El formato del email no es válido'
+            newErrors.email = 'El formato del email no es válido';
         }
 
         // Validación de la contraseña
         if (!password) {
-            newErrors.password = 'La contraseña es obligatoria'
+            newErrors.password = 'La contraseña es obligatoria';
         } else if (password.length < 6) {
-            newErrors.password = 'La contraseña debe tener al menos 6 caracteres'
+            newErrors.password = 'La contraseña debe tener al menos 6 caracteres';
         }
 
         if (Object.keys(newErrors).length === 0) {
-            alert('¡Login exitoso!')
-            setEmail('')
-            setPassword('')
-            setErrors({})
+            login(); // Activar el token
+            alert('¡Login exitoso!');
+            navigate('/'); // Redirigir al home
         } else {
-            setErrors(newErrors)
+            setErrors(newErrors);
         }
-    }
+    };
 
     return (
         <div className="container mx-auto px-4 pt-5">
@@ -69,7 +74,7 @@ const LoginPage = () => {
                 </div>
             </div>
         </div>
-    )
-}
+    );
+};
 
-export default LoginPage
+export default LoginPage;

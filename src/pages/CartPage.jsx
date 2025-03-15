@@ -1,11 +1,14 @@
+// src/pages/CartPage.jsx
 import { useContext } from 'react';
 import { Card, Button } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 import { CartContext } from '../context/CartContext';
+import { UserContext } from '../context/UserContext';
 
 const CartPage = () => {
-    // Accedemos al contexto del carrito
+    // Contextos
     const { cart, total, incrementQuantity, decrementQuantity, removeFromCart, clearCart } = useContext(CartContext);
+    const { token } = useContext(UserContext); //Consume el contexto
 
     return (
         <div className="container my-4">
@@ -80,7 +83,15 @@ const CartPage = () => {
                     ))}
                     <div className="text-end mt-4">
                         <h4>Total del Carrito: ${total.toLocaleString()}</h4>
-                        <Button variant="success" size="lg" className="mt-2">Ir a Pagar</Button>
+                        <Button 
+                            variant="success" 
+                            size="lg" 
+                            className="mt-2"
+                            disabled={!token}
+                            title={!token ? "Inicia sesión para continuar con el pago" : ""}
+                        >
+                            {token ? "Ir a Pagar" : "Inicia sesión para pagar"}
+                        </Button>
                     </div>
                 </>
             )}
