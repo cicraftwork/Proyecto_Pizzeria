@@ -46,7 +46,7 @@ export const PizzaProvider = ({ children }) => {
     }
   }, []);
 
-  // Crear un valor memorizado para el contexto
+  // Crear valor memorizado para el contexto
   const value = useMemo(() => ({
     pizzas,
     loading,

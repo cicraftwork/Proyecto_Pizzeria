@@ -1,4 +1,3 @@
-// src/App.jsx
 import './App.css';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import { useContext } from 'react';
@@ -24,14 +23,14 @@ import { UserContext, UserProvider } from './context/UserContext';
 
 // Componente para rutas protegidas
 const ProtectedRoute = ({ children }) => {
-  const { token } = useContext(UserContext);
-  return token ? children : <Navigate to="/login" />; //Redirige a login si token es false
+  const { isAuthenticated } = useContext(UserContext);
+  return isAuthenticated ? children : <Navigate to="/login" />;
 };
 
 // Componente para rutas solo accesibles sin autenticación
 const PublicOnlyRoute = ({ children }) => {
-  const { token } = useContext(UserContext);
-  return !token ? children : <Navigate to="/" />; //Redirige a home si token es true
+  const { isAuthenticated } = useContext(UserContext);
+  return !isAuthenticated ? children : <Navigate to="/" />;
 };
 
 // PropTypes para los componentes de rutas

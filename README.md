@@ -1,5 +1,7 @@
+🍕 Pizzería Mamma Mía - Proyecto React
+
 ## Descripción
-Este proyecto es una aplicación web para una pizzería desarrollada con React que permite a los usuarios explorar el menú de pizzas, ver detalles de cada pizza, agregarlas al carrito de compras y gestionar su pedido. Forma parte del bootcamp de Desarrollo Full Stack JavaScript - Módulo 4: React I de Desafío Latam.
+Este proyecto es una aplicación web para una pizzería desarrollada con React que permite a los usuarios explorar el menú de pizzas, ver detalles de cada pizza, agregarlas al carrito de compras, gestionar su pedido y autenticarse mediante JWT. Forma parte del bootcamp de Desarrollo Full Stack JavaScript - Módulo 4: React de Desafío Latam.
 
 ## Tecnologías Utilizadas
 - React 18
@@ -8,6 +10,7 @@ Este proyecto es una aplicación web para una pizzería desarrollada con React q
 - React Bootstrap
 - Context API
 - Fetch API para consumo de datos
+- JWT para autenticación
 
 ## Funcionalidades Implementadas
 - Visualización de catálogo de pizzas
@@ -18,6 +21,9 @@ Este proyecto es una aplicación web para una pizzería desarrollada con React q
 - Persistencia de carrito mediante localStorage
 - Gestión de estado global con Context API
 - Formularios de registro e inicio de sesión con validaciones
+- Autenticación de usuarios mediante JWT
+- Rutas protegidas basadas en autenticación
+- Checkout para completar la compra (requiere autenticación)
 
 ## Estructura del Proyecto
 ```
@@ -43,7 +49,8 @@ PROYECTO_PIZZERIA/
 │   │       └── Toast.jsx
 │   ├── context/
 │   │   ├── CartContext.jsx
-│   │   └── PizzaContext.jsx
+│   │   ├── PizzaContext.jsx
+│   │   └── UserContext.jsx
 │   ├── pages/
 │   │   ├── CartPage.jsx
 │   │   ├── Home.jsx
@@ -61,11 +68,11 @@ PROYECTO_PIZZERIA/
 ├── index.html
 ├── package-lock.json
 ├── package.json
-└── vite.config.js
+└── README.md
 ```
 
 ## Hitos del Proyecto
-El proyecto se desarrolla a través de varios hitos incrementales:
+El proyecto se desarrolló a través de varios hitos incrementales:
 
 1. **Introducción a React** - Componentes básicos y estructura
 2. **Estado de los componentes y eventos** - Formularios y validación
@@ -73,76 +80,103 @@ El proyecto se desarrolla a través de varios hitos incrementales:
 4. **Consumo de APIs con React** - Integración con backend
 5. **React Router I** - Sistema de navegación
 6. **Context** - Gestión de estado global
-7. **React Router II** - Rutas protegidas (próximo)
-8. **JWT** - Autenticación (próximo)
-
-## Contextos implementados
-- **PizzaContext**: Maneja el estado global de las pizzas disponibles y proporciona funciones para obtener datos de la API.
-- **CartContext**: Gestiona el estado del carrito de compras, incluyendo agregar/eliminar items y calcular el total.
-
-## Rutas implementadas
-- `/`: Página principal que muestra todas las pizzas disponibles
-- `/pizza/:id`: Detalle de una pizza específica
-- `/cart`: Carrito de compras
-- `/register`: Formulario de registro de usuarios
-- `/login`: Inicio de sesión de usuarios
-- `/profile`: Perfil de usuario
-- `*`: Página de 404 Not Found
-
-## Backend de la aplicación
-La aplicación consume datos de una API local que corre en http://localhost:5000/api:
-- `/pizzas`: Obtiene todas las pizzas disponibles
-- `/pizzas/:id`: Obtiene el detalle de una pizza específica
-
-## Componentes Principales
-
-### CardPizza
-**Descripción:** Tarjeta para mostrar información de una pizza
-**Props:**
-- `pizza`: Objeto con datos de la pizza (id, name, price, ingredients, img)
-**Funcionalidad:** Muestra la información básica de una pizza y permite añadirla al carrito
-
-### RegisterPage
-**Descripción:** Formulario de registro de usuarios
-**Estados:**
-- `email`: Correo del usuario
-- `password`: Contraseña (min 6 caracteres)
-- `confirmPassword`: Validación de contraseña
-- `errors`: Objeto con mensajes de error por campo
-**Validaciones:**
-- Email válido con formato correcto
-- Contraseña mínimo 6 caracteres
-- Confirmación de contraseña coincidente
-
-### LoginPage
-**Descripción:** Formulario de inicio de sesión
-**Estados:**
-- `email`: Correo del usuario
-- `password`: Contraseña
-- `error`: Estado para mostrar errores de validación
+7. **React Router II** - Rutas protegidas y parámetros
+8. **JWT** - Autenticación y autorización
 
 ## Instalación y Ejecución
+
+### Frontend
 1. Clonar este repositorio
-   ```
-   git clone https://github.com/cicraftwork/Proyecto_Pizzeria.git
+   ```bash
+   git clone https://github.com/tu-usuario/Proyecto_Pizzeria.git
    ```
 2. Instalar dependencias
-   ```
+   ```bash
    npm install
    ```
 3. Iniciar el servidor de desarrollo
-   ```
+   ```bash
    npm run dev
    ```
 4. Acceder a la aplicación en: http://localhost:5173
 
-## Requisitos 
-- Node.js >= 14
-- Tener el servidor backend de pizzas en ejecución en http://localhost:5000
+### Backend
+1. Iniciar el servidor backend en un directorio separado
+   ```bash
+   npm start
+   ```
+2. El servidor backend debe estar disponible en http://localhost:5000
 
-## Contribuir
+## Credenciales de prueba
+Para probar la aplicación con un usuario existente:
+- Email: test@test.com
+- Password: 123123
+
+## Principales Contextos Implementados
+
+### UserContext
+- Gestiona el estado de autenticación del usuario
+- Proporciona métodos para:
+  - Registro de usuarios (register)
+  - Inicio de sesión (login)
+  - Cierre de sesión (logout)
+  - Obtención de perfil (getProfile)
+- Mantiene el token JWT y email del usuario
+
+### CartContext
+- Gestiona el estado global del carrito de compras
+- Proporciona funciones para:
+  - Agregar productos al carrito
+  - Eliminar productos del carrito
+  - Incrementar/decrementar cantidades
+  - Calcular total de la compra
+  - Limpiar el carrito
+
+### PizzaContext
+- Maneja el estado global de las pizzas disponibles
+- Proporciona funciones para obtener datos de la API
+- Centraliza la lógica de consumo de datos
+
+## Flujo de autenticación
+1. El usuario se registra o inicia sesión
+2. El backend genera un token JWT
+3. El frontend almacena el token en localStorage
+4. El token se incluye en los headers de las peticiones a rutas protegidas
+5. El backend valida el token y permite/deniega el acceso
+
+## Rutas Implementadas
+- `/`: Página principal (Home)
+- `/register`: Registro de usuarios
+- `/login`: Inicio de sesión
+- `/cart`: Carrito de compras
+- `/pizza/:id`: Detalle de una pizza específica
+- `/profile`: Perfil de usuario (ruta protegida)
+- `*`: Página de error para rutas no encontradas
+
+## Endpoints del Backend
+- **Autenticación**
+  - `POST /api/auth/login`: Inicio de sesión
+  - `POST /api/auth/register`: Registro de usuario
+  - `GET /api/auth/me`: Obtener perfil de usuario (requiere token)
+- **Productos**
+  - `GET /api/pizzas`: Obtener todas las pizzas
+  - `GET /api/pizzas/:id`: Obtener una pizza específica
+- **Compras**
+  - `POST /api/checkouts`: Procesar compra (requiere token)
+
+## Características de Seguridad
+- Autenticación mediante JWT
+- Rutas protegidas que requieren autenticación
+- Validación de formularios
+- Protección contra acceso no autorizado a rutas privadas
+- Redirección automática basada en estado de autenticación
+
+
+---
+
+## Contribución
 Este proyecto está desarrollado con fines educativos como parte del bootcamp de Desarrollo Full Stack JavaScript de Desafío Latam.
 
 ---
 
-Desarrollado por [cicraftwork](https://github.com/cicraftwork)
+Desarrollado por CI Craftwork (https://github.com/cicraftwork) - Desafío Latam 2025

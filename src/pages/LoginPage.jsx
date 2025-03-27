@@ -2,13 +2,14 @@
 import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { UserContext } from '../context/UserContext';
+import { Button, Spinner } from 'react-bootstrap';
 
 const LoginPage = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [errors, setErrors] = useState({});
     
-    const { login } = useContext(UserContext);
+    const { login, loading } = useContext(UserContext);
     const navigate = useNavigate();
 
     const validateEmail = (email) => {
@@ -16,7 +17,7 @@ const LoginPage = () => {
         return regex.test(email);
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         const newErrors = {};
 
@@ -35,9 +36,10 @@ const LoginPage = () => {
         }
 
         if (Object.keys(newErrors).length === 0) {
-            login(); // Activar el token
-            alert('¡Login exitoso!');
-            navigate('/'); // Redirigir al home
+            const success = await login(email, password);
+            if (success) {
+                navigate('/');
+            }
         } else {
             setErrors(newErrors);
         }
@@ -56,6 +58,7 @@ const LoginPage = () => {
                                 className={`form-control ${errors.email ? 'is-invalid' : ''}`}
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
+                                disabled={loading}
                             />
                             {errors.email && <div className="invalid-feedback">{errors.email}</div>}
                         </div>
@@ -66,10 +69,30 @@ const LoginPage = () => {
                                 className={`form-control ${errors.password ? 'is-invalid' : ''}`}
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
+                                disabled={loading}
                             />
                             {errors.password && <div className="invalid-feedback">{errors.password}</div>}
                         </div>
-                        <button type="submit" className="btn btn-primary w-100">Iniciar Sesión</button>
+                        <Button 
+                            type="submit" 
+                            className="w-100" 
+                            variant="primary"
+                            disabled={loading}
+                        >
+                            {loading ? (
+                                <>
+                                    <Spinner
+                                        as="span"
+                                        animation="border"
+                                        size="sm"
+                                        role="status"
+                                        aria-hidden="true"
+                                        className="me-2"
+                                    />
+                                    Iniciando sesión...
+                                </>
+                            ) : 'Iniciar Sesión'}
+                        </Button>
                     </form>
                 </div>
             </div>

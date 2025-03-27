@@ -4,7 +4,7 @@ import CardPizza from '../components/CardPizza/CardPizza';
 import { PizzaContext } from '../context/PizzaContext';
 
 const Home = () => {
-  // Usamos el contexto de pizzas
+  // Contexto de pizzas
   const { pizzas, loading, error } = useContext(PizzaContext);
 
   if (loading) return <div className="text-center mt-5">Cargando pizzas...</div>;

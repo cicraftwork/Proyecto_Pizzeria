@@ -1,4 +1,4 @@
-import { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect, useMemo } from "react";
 import PropTypes from 'prop-types';
 import Toast from '../components/Toast/Toast';
 
@@ -109,16 +109,19 @@ export const CartProvider = ({ children }) => {
     });
   };
 
+  // Optimización: Envolver el objeto de valor en useMemo
+  const contextValue = useMemo(() => ({
+    cart,
+    total,
+    addToCart,
+    removeFromCart,
+    incrementQuantity,
+    decrementQuantity,
+    clearCart
+  }), [cart, total]); // Dependencias necesarias
+
   return (
-    <CartContext.Provider value={{
-      cart,
-      total,
-      addToCart,
-      removeFromCart,
-      incrementQuantity,
-      decrementQuantity,
-      clearCart
-    }}>
+    <CartContext.Provider value={contextValue}>
       {children}
       {notification && (
         <Toast

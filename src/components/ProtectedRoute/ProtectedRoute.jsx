@@ -5,11 +5,11 @@ import PropTypes from 'prop-types';
 
 const ProtectedRoute = ({ children }) => {
   const { token } = useContext(UserContext);
-  
+
   if (!token) {
     return <Navigate to="/login" />;
   }
-  
+
   return children;
 };
 
